@@ -9,7 +9,7 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 find_package(Eigen3)
 include_directories(${EIGEN3_INCLUDE_DIR})
 
-add_executable(Test handdata_convert.cpp)
-target_link_libraries(Test ${OpenCV_LIBS} ${EIGEN3_LIBS})
+add_executable(handdata_convert handdata_convert.cpp)
+target_link_libraries(handdata_convert ${OpenCV_LIBS} ${EIGEN3_LIBS})
 
 add_executable(socket_test socket_test.cpp)
