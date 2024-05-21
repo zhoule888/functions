@@ -387,7 +387,7 @@ int main2()
 
 }
 
-int main()
+int main3()
 {
 //	char message[42*7*4];
 //	FILE*fp=fopen("/media/lae/data/projects/mercury_steamvr_driver/cmake-build-release/src/1000000.txt","rb");
@@ -403,10 +403,10 @@ int main()
 //	return 0;
 
 
-	float w=-0.755215;
-	float x=-0.626990;
-	float y=-0.169570;
-	float z=-0.088205;
+	float w=0.99999966;
+	float x=0.00053106;
+	float y=0.00062314;
+	float z=-0.00001957;
 
 
 	Eigen::Quaternionf q1(w,x,y,z);
@@ -434,3 +434,4 @@ const Mat cameraInstric = (cv::Mat_<float>(3, 3) <<
 		0, fc[1], fc[3],
 		0, 0, 1);
 const Mat distort = (cv::Mat_<float>(4, 1) << 0.03367092942210882, -0.01092536373706107, -0.001379234835882732, -0.000709925283960796);
+
