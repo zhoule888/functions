@@ -51,22 +51,28 @@ Informative_Drawings::Informative_Drawings(string model_path)
 	{
 		auto node_name=ort_session->GetInputNameAllocated(i, allocator);
 		input_names_str.push_back(string(node_name.get()));
-		input_names.push_back((char*)(input_names_str.back().c_str()));
+		//input_names.push_back((char*)(input_names_str.back().c_str()));
 		Ort::TypeInfo input_type_info = ort_session->GetInputTypeInfo(i);
 		auto input_tensor_info = input_type_info.GetTensorTypeAndShapeInfo();
 		auto input_dims = input_tensor_info.GetShape();
 		input_node_dims.push_back(input_dims);
 	}
+	for (auto &name:input_names_str)
+		input_names.push_back((char*)name.c_str());
+
 	for (int i = 0; i < numOutputNodes; i++)
 	{
 		auto node_name=ort_session->GetOutputNameAllocated(i, allocator);
 		output_names_str.push_back(string(node_name.get()));
-		output_names.push_back((char*)(output_names_str.back().c_str()));
+		//output_names.push_back((char*)(output_names_str.back().c_str()));
 		Ort::TypeInfo output_type_info = ort_session->GetOutputTypeInfo(i);
 		auto output_tensor_info = output_type_info.GetTensorTypeAndShapeInfo();
 		auto output_dims = output_tensor_info.GetShape();
 		output_node_dims.push_back(output_dims);
 	}
+	for (auto &name:output_names_str)
+		output_names.push_back((char*)name.c_str());
+
 	this->inpHeight = input_node_dims[0][2];
 	this->inpWidth = input_node_dims[0][3];
 	this->outHeight = output_node_dims[0][2];
@@ -106,7 +112,8 @@ Mat Informative_Drawings::detect(Mat& srcimg)
 
 int main()
 {
-	Informative_Drawings mynet("/media/lae/data/testProject/functions/informative-drawings-onnxrun-cpp-py-main/weights/opensketch_style_512x512.onnx");
+	Informative_Drawings mynet(
+			"/media/lae/data/testProject/functions/informative-drawings-onnxrun-cpp-py-main/weights/anime_style_512x512.onnx");
 	///choices=["weights/opensketch_style_512x512.onnx", "weights/anime_style_512x512.onnx", "weights/contour_style_512x512.onnx"]
 	string imgpath = "/media/lae/data/testProject/functions/informative-drawings-onnxrun-cpp-py-main/images/1.jpg";
 	Mat srcimg = imread(imgpath);
