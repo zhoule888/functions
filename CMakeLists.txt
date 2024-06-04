@@ -20,3 +20,7 @@ target_link_libraries(thread_test pthread)
 
 add_executable(QRCodeDetector_test QRCodeDetector_test.cpp)
 target_link_libraries(QRCodeDetector_test ${OpenCV_LIBS} ${EIGEN3_LIBS}  /usr/local/lib/libzxing.a)
+
+add_executable(circle_test circle_detect.cpp)
+target_link_libraries(circle_test ${OpenCV_LIBS} ${EIGEN3_LIBS})
+
