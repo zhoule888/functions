@@ -29,8 +29,8 @@ private:
 	Ort::Session *ort_session = nullptr;
 	SessionOptions sessionOptions = SessionOptions();
 	vector<char*> input_names;
-	vector<string> input_names_str;
 	vector<char*> output_names;
+	vector<string> input_names_str;
 	vector<string> output_names_str;
 	vector<vector<int64_t>> input_node_dims; // >=1 outputs
 	vector<vector<int64_t>> output_node_dims; // >=1 outputs
