@@ -33,6 +33,8 @@ private:
 	Ort::SessionOptions sessionOptions = Ort::SessionOptions();
 	std::vector<char*> input_names;
 	std::vector<char*> output_names;
+	std::vector<std::string> input_names_str;
+	std::vector<std::string> output_names_str;
 	std::vector<std::vector<int64_t>> input_node_dims; // >=1 outputs
 	std::vector<std::vector<int64_t>> output_node_dims; // >=1 outputs
 	Ort::MemoryInfo memory_info_handler = Ort::MemoryInfo::CreateCpu(OrtDeviceAllocator, OrtMemTypeCPU);

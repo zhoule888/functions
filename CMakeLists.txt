@@ -36,5 +36,5 @@ add_subdirectory(wechat_qr_detect)
 add_subdirectory(informative-drawings-onnxrun-cpp-py-main)
 add_subdirectory(CodeFormer-onnxrun-cpp-py-main)
 add_subdirectory(gaze-estimation-opencv-dnn-main)
-add_subdirectory(facefusion-onnxrun)
+add_subdirectory(facefusion)
 

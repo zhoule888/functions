@@ -18,7 +18,9 @@ Yolov8Face::Yolov8Face(string model_path, const float conf_thres, const float io
     AllocatorWithDefaultOptions allocator;
     for (int i = 0; i < numInputNodes; i++)
     {
-        input_names.push_back(ort_session->GetInputName(i, allocator));      ///低版本onnxruntime的接口函数
+        //input_names.push_back(ort_session->GetInputName(i, allocator));      ///低版本onnxruntime的接口函数
+	    auto node_name=ort_session->GetInputNameAllocated(i, allocator);
+	    input_names_str.push_back(string(node_name.get()));
         ////AllocatedStringPtr input_name_Ptr = ort_session->GetInputNameAllocated(i, allocator);  /// 高版本onnxruntime的接口函数
         ////input_names.push_back(input_name_Ptr.get()); /// 高版本onnxruntime的接口函数
         Ort::TypeInfo input_type_info = ort_session->GetInputTypeInfo(i);
@@ -26,16 +28,23 @@ Yolov8Face::Yolov8Face(string model_path, const float conf_thres, const float io
         auto input_dims = input_tensor_info.GetShape();
         input_node_dims.push_back(input_dims);
     }
+	for (auto &name:input_names_str)
+		input_names.push_back((char*)name.c_str());
+
     for (int i = 0; i < numOutputNodes; i++)
     {
-        output_names.push_back(ort_session->GetOutputName(i, allocator));  ///低版本onnxruntime的接口函数
+//        output_names.push_back(ort_session->GetOutputName(i, allocator));  ///低版本onnxruntime的接口函数
         ////AllocatedStringPtr output_name_Ptr= ort_session->GetInputNameAllocated(i, allocator);
+	    auto node_name=ort_session->GetInputNameAllocated(i, allocator);
+	    output_names_str.push_back(string(node_name.get()));
         ////output_names.push_back(output_name_Ptr.get()); /// 高版本onnxruntime的接口函数
         Ort::TypeInfo output_type_info = ort_session->GetOutputTypeInfo(i);
         auto output_tensor_info = output_type_info.GetTensorTypeAndShapeInfo();
         auto output_dims = output_tensor_info.GetShape();
         output_node_dims.push_back(output_dims);
     }
+	for (auto &name:output_names_str)
+		output_names.push_back((char*)name.c_str());
 
     this->input_height = input_node_dims[0][2];
     this->input_width = input_node_dims[0][3];

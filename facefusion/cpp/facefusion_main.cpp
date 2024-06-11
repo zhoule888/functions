@@ -9,8 +9,8 @@ using namespace std;
 
 int main()
 {
-	string source_path = "/project/faceswap-cpp/images/5.jpg";
-	string target_path = "/project/faceswap-cpp/images/target.jpg";
+	string source_path = "/media/lae/data/testProject/functions/facefusion/cpp/images/5.jpg";
+	string target_path = "/media/lae/data/testProject/functions/facefusion/cpp/images/target.jpg";
     
 	////图片路径和onnx文件的路径，要确保写正确，才能使程序正常运行的
 	Yolov8Face detect_face_net("/project/faceswap-cpp/weights/yoloface_8n.onnx");
