@@ -6,7 +6,9 @@ project(Apriltag)
 # C++14
 set(CMAKE_CXX_STANDARD 14)
 
-find_package(OpenCV 4)
+if(NOT OpenCV_FOUND)
+    find_package(OpenCV 4)
+endif ()
 find_package(Eigen3)
 
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)

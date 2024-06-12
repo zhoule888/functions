@@ -5,7 +5,9 @@ set(CMAKE_CXX_STANDARD 17)
 
 set(OpenCV_DIR ${PROJECT_SOURCE_DIR}/3rd/opencv490/lib/cmake/opencv4)
 find_package(OpenCV REQUIRED)
-message(STATUS "OpenCV version: "${OpenCV_VERSION})
+if(OpenCV_FOUND)
+    message(STATUS "OpenCV version: "${OpenCV_VERSION})
+endif ()
 include_directories(${OpenCV_INCLUDE_DIRS})
 
 find_package(Eigen3)

@@ -33,7 +33,7 @@ Face68Landmarks::Face68Landmarks(string model_path)
 
     for (int i = 0; i < numOutputNodes; i++)
     {
-		auto node_name=ort_session->GetInputNameAllocated(i, allocator);
+		auto node_name=ort_session->GetOutputNameAllocated(i, allocator);
 	    output_names_str.push_back(string(node_name.get()));
         //output_names.push_back(ort_session->GetOutputName(i, allocator)); /// 低版本onnxruntime的接口函数
         ////AllocatedStringPtr output_name_Ptr= ort_session->GetInputNameAllocated(i, allocator);

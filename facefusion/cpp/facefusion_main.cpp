@@ -13,14 +13,16 @@ int main()
 	string target_path = "/media/lae/data/testProject/functions/facefusion/cpp/images/target.jpg";
     
 	////图片路径和onnx文件的路径，要确保写正确，才能使程序正常运行的
-	Yolov8Face detect_face_net("/project/faceswap-cpp/weights/yoloface_8n.onnx");
-	Face68Landmarks detect_68landmarks_net("/project/faceswap-cpp/weights/2dfan4.onnx");
-	FaceEmbdding face_embedding_net("/project/faceswap-cpp/weights/arcface_w600k_r50.onnx");
-	SwapFace swap_face_net("/project/faceswap-cpp/weights/inswapper_128.onnx");
-	FaceEnhance enhance_face_net("/project/faceswap-cpp/weights/gfpgan_1.4.onnx");
+	Yolov8Face detect_face_net("/media/lae/data/testProject/functions/facefusion/weights/yoloface_8n.onnx");
+	Face68Landmarks detect_68landmarks_net("/media/lae/data/testProject/functions/facefusion/weights/2dfan4.onnx");
+	FaceEmbdding face_embedding_net("/media/lae/data/testProject/functions/facefusion/weights/arcface_w600k_r50.onnx");
+	SwapFace swap_face_net("/media/lae/data/testProject/functions/facefusion/weights/inswapper_128.onnx");
+	FaceEnhance enhance_face_net("/media/lae/data/testProject/functions/facefusion/weights/gfpgan_1.4.onnx");
 
 	Mat source_img = imread(source_path);
 	Mat target_img = imread(target_path);
+	imshow("src",source_img);
+	imshow("target",target_img);
 
     vector<Bbox> boxes;
 	detect_face_net.detect(source_img, boxes);
@@ -36,7 +38,9 @@ int main()
 
 	Mat swapimg = swap_face_net.process(target_img, source_face_embedding, target_landmark_5);
 	Mat resultimg = enhance_face_net.process(swapimg, target_landmark_5);
-	
+
+	imshow("result",resultimg);
+	waitKey();
 	imwrite("resultimg.jpg", resultimg);
 
 	/*static const string kWinName = "Deep learning face swap use onnxruntime";

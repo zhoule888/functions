@@ -34,7 +34,7 @@ FaceEmbdding::FaceEmbdding(string model_path)
     for (int i = 0; i < numOutputNodes; i++)
     {
         //output_names.push_back(ort_session->GetOutputName(i, allocator)); /// 低版本onnxruntime的接口函数
-	    auto node_name=ort_session->GetInputNameAllocated(i, allocator);
+	    auto node_name=ort_session->GetOutputNameAllocated(i, allocator);
 	    output_names_str.push_back(string(node_name.get()));
         ////AllocatedStringPtr output_name_Ptr= ort_session->GetInputNameAllocated(i, allocator);
         ////output_names.push_back(output_name_Ptr.get()); /// 高版本onnxruntime的接口函数
