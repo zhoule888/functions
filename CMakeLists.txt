@@ -3,20 +3,42 @@ project(Functions)
 
 set(CMAKE_CXX_STANDARD 17)
 
-set(OpenCV_DIR ${PROJECT_SOURCE_DIR}/3rd/opencv490/lib/cmake/opencv4)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/output/lib/${CMAKE_SYSTEM_PROCESSOR})
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/output/bin/${CMAKE_SYSTEM_PROCESSOR})
+set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/output/lib/${CMAKE_SYSTEM_PROCESSOR})
+
+if (MSVC)
+    set(OpenCV_DIR D:/projects/carina_win/thirdparty/opencv/windows_x64/build)
+endif()
 find_package(OpenCV REQUIRED)
 if(OpenCV_FOUND)
     message(STATUS "OpenCV version: "${OpenCV_VERSION})
 endif ()
 include_directories(${OpenCV_INCLUDE_DIRS})
 
-find_package(Eigen3)
-include_directories(${EIGEN3_INCLUDE_DIR})
+
+
 
 #set(ONNXRuntime_DIR /usr/local/lib)
 #find_package(ONNXRuntime)
-set(ONNXRuntime_INCLUDE_DIRS /usr/local/include/onnxruntime/core/session)
-set(ONNXRuntime_LIBRARIES /usr/local/lib/libonnxruntime.so)
+if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+    set(ONNXRuntime_INCLUDE_DIRS /usr/local/include/onnxruntime/core/session)
+    set(ONNXRuntime_LIBRARIES /usr/local/lib/libonnxruntime.so)
+
+    find_package(Eigen3)
+    include_directories(${EIGEN3_INCLUDE_DIR})
+else (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+    set(ONNXRuntime_INCLUDE_DIRS
+            ${PROJECT_SOURCE_DIR}/3rd/onnxruntime-win-x64-gpu-1.21.0/include)
+    set(ONNXRuntime_LIBRARIES
+            ${PROJECT_SOURCE_DIR}/3rd/onnxruntime-win-x64-gpu-1.21.0/lib/onnxruntime_providers_cuda.lib
+            ${PROJECT_SOURCE_DIR}/3rd/onnxruntime-win-x64-gpu-1.21.0/lib/onnxruntime.lib
+            ${PROJECT_SOURCE_DIR}/3rd/onnxruntime-win-x64-gpu-1.21.0/lib/onnxruntime_providers_shared.lib
+            ${PROJECT_SOURCE_DIR}/3rd/onnxruntime-win-x64-gpu-1.21.0/lib/onnxruntime_providers_tensorrt.lib)
+
+    set(Eigen3_DIR ${PROJECT_SOURCE_DIR}/3rd/eigen3)
+    include_directories(${EIGEN3_INCLUDE_DIR})
+endif()
 
 message(STATUS "ONNXRuntime include: "${ONNXRuntime_INCLUDE_DIRS})
 message(STATUS "ONNXRuntime_LIBRARIES: "${ONNXRuntime_LIBRARIES})

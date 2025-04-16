@@ -9,20 +9,27 @@ using namespace std;
 
 int main()
 {
-	string source_path = "/media/lae/data/testProject/functions/facefusion/cpp/images/5.jpg";
-	string target_path = "/media/lae/data/testProject/functions/facefusion/cpp/images/target.jpg";
-    
+#ifdef WIN32
+	string path = "D:/testProject/functions/facefusion/";
+#else
+	string path = "/media/lae/data/testProject/functions/facefusion\";
+#endif
+
+	string source_path=path+"cpp/images/6.jpg";
+	string target_path = path+"cpp/images/14.jpg";
+
 	////图片路径和onnx文件的路径，要确保写正确，才能使程序正常运行的
-	Yolov8Face detect_face_net("/media/lae/data/testProject/functions/facefusion/weights/yoloface_8n.onnx");
-	Face68Landmarks detect_68landmarks_net("/media/lae/data/testProject/functions/facefusion/weights/2dfan4.onnx");
-	FaceEmbdding face_embedding_net("/media/lae/data/testProject/functions/facefusion/weights/arcface_w600k_r50.onnx");
-	SwapFace swap_face_net("/media/lae/data/testProject/functions/facefusion/weights/inswapper_128.onnx");
-	FaceEnhance enhance_face_net("/media/lae/data/testProject/functions/facefusion/weights/gfpgan_1.4.onnx");
+	Yolov8Face detect_face_net(path+"weights/yoloface_8n.onnx");
+	Face68Landmarks detect_68landmarks_net(path+"weights/2dfan4.onnx");
+	FaceEmbdding face_embedding_net(path+"weights/arcface_w600k_r50.onnx");
+	SwapFace swap_face_net(path+"weights/inswapper_128.onnx",path+"cpp/model_matrix.bin");
+	FaceEnhance enhance_face_net(path+"weights/gfpgan_1.4.onnx");
 
 	Mat source_img = imread(source_path);
 	Mat target_img = imread(target_path);
 	imshow("src",source_img);
 	imshow("target",target_img);
+	imwrite("target.png",target_img);
 
     vector<Bbox> boxes;
 	detect_face_net.detect(source_img, boxes);

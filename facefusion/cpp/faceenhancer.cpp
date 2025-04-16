@@ -9,10 +9,12 @@ FaceEnhance::FaceEnhance(string model_path)
     /// OrtStatus* status = OrtSessionOptionsAppendExecutionProvider_CUDA(sessionOptions, 0);   ///如果使用cuda加速，需要取消注释
 
     sessionOptions.SetGraphOptimizationLevel(ORT_ENABLE_BASIC);
-    /// std::wstring widestr = std::wstring(model_path.begin(), model_path.end());  ////windows写法
-    /// ort_session = new Session(env, widestr.c_str(), sessionOptions); ////windows写法
+#if defined(WIN32)
+    std::wstring widestr = std::wstring(model_path.begin(), model_path.end());  ////windows写法
+    ort_session = new Session(env, widestr.c_str(), sessionOptions); ////windows写法
+#else
     ort_session = new Session(env, model_path.c_str(), sessionOptions); ////linux写法
-
+#endif
     size_t numInputNodes = ort_session->GetInputCount();
     size_t numOutputNodes = ort_session->GetOutputCount();
     AllocatorWithDefaultOptions allocator;

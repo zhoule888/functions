@@ -10,6 +10,12 @@
 #include "TagDetection.h"
 using namespace std;
 
+#ifdef WIN32
+#define _EXPORT_ __declspec(dllexport)
+#else
+#define _EXPORT_ __attribute__((visibility("default")))
+#endif
+
 namespace AprilTags {
 
 class TagCodes {
@@ -37,7 +43,7 @@ static const TagCodes tagCodes16h5 = TagCodes(16, 5, t16h5, sizeof(t16h5)/sizeof
 
 
 //! Generic class for all tag encoding families
-class TagFamily {
+class _EXPORT_ TagFamily {
 public:
   //! The codes array is not copied internally and so must not be modified externally.
   TagFamily(const TagCodes& tagCodes, const size_t blackBorder);

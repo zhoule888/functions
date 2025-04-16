@@ -4,14 +4,18 @@ using namespace cv;
 using namespace std;
 using namespace Ort;
 
-SwapFace::SwapFace(string model_path)
+SwapFace::SwapFace(string model_path,string model_matrix_path)
 {
     /// OrtStatus* status = OrtSessionOptionsAppendExecutionProvider_CUDA(sessionOptions, 0);   ///如果使用cuda加速，需要取消注释
 
     sessionOptions.SetGraphOptimizationLevel(ORT_ENABLE_BASIC);
-    /// std::wstring widestr = std::wstring(model_path.begin(), model_path.end());  ////windows写法
-    /// ort_session = new Session(env, widestr.c_str(), sessionOptions); ////windows写法
+
+#if defined(WIN32)
+    std::wstring widestr = std::wstring(model_path.begin(), model_path.end());  ////windows写法
+    ort_session = new Session(env, widestr.c_str(), sessionOptions); ////windows写法
+#else
     ort_session = new Session(env, model_path.c_str(), sessionOptions); ////linux写法
+#endif
     
     size_t numInputNodes = ort_session->GetInputCount();
     size_t numOutputNodes = ort_session->GetOutputCount();
@@ -52,7 +56,7 @@ SwapFace::SwapFace(string model_path)
     const int length = this->len_feature*this->len_feature;
     this->model_matrix = new float[length];
     cout<<"start read model_matrix.bin"<<endl;
-    FILE* fp = fopen("/media/lae/data/testProject/functions/facefusion/cpp/model_matrix.bin", "rb");
+    FILE* fp = fopen(model_matrix_path.c_str(), "rb");
     fread(this->model_matrix, sizeof(float), length, fp);//导入数据
     fclose(fp);//关闭文件
     cout<<"read model_matrix.bin finish"<<endl;

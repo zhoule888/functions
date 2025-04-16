@@ -11,7 +11,7 @@
 class SwapFace
 {
 public:
-	SwapFace(std::string modelpath);
+	SwapFace(std::string modelpath,std::string model_matrix_path);
 	cv::Mat process(cv::Mat target_img, const std::vector<float> source_face_embedding, const std::vector<cv::Point2f> target_landmark_5);
 	~SwapFace();  // 析构函数, 释放内存
 private:
