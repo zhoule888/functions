@@ -432,11 +432,17 @@ Mat GazeEstimation::draw_on(Mat srcimg, face box)
 
 int main()
 {
+#ifdef WIN32
+	string path = "D:/testProject/functions/gaze-estimation-opencv-dnn-main/";
+#else
+	string path = "/media/lae/data/testProject/functions/gaze-estimation-opencv-dnn-main/";
+#endif
 
-	YOLOv8_face face_detector("/media/lae/data/testProject/functions/gaze-estimation-opencv-dnn-main/weights/yolov8n-face.onnx", 0.45, 0.5);
-	GazeEstimation gaze_predictor("/media/lae/data/testProject/functions/gaze-estimation-opencv-dnn-main/weights/generalizing_gaze_estimation_with_weak_supervision_from_synthetic_views_1x3x160x160.onnx");
+	YOLOv8_face face_detector(path+"weights/yolov8n-face.onnx", 0.45, 0.5);
+	GazeEstimation gaze_predictor(path+
+		"weights/generalizing_gaze_estimation_with_weak_supervision_from_synthetic_views_1x3x160x160.onnx");
 #if 0
-	string imgpath = "/media/lae/data/testProject/functions/gaze-estimation-opencv-dnn-main/images/vintage-635244.jpg";
+	string imgpath = path+"images/vintage-635244.jpg";
 	Mat srcimg = imread(imgpath);
 	vector<face> face_boxes = face_detector.detect(srcimg);
 
@@ -454,7 +460,7 @@ int main()
 	destroyAllWindows();
 #else
 	////输入视频的
-	string videopath = "/media/lae/data/testProject/functions/gaze-estimation-opencv-dnn-main/images/test.mp4";
+	string videopath = path+"images/test.mp4";
 	string savepath = "result.mp4";
 	VideoCapture vcapture(videopath);
 	if (!vcapture.isOpened())

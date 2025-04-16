@@ -43,10 +43,12 @@ CodeFormer::CodeFormer(string model_path)
 {
 	//OrtStatus* status = OrtSessionOptionsAppendExecutionProvider_CUDA(sessionOptions, 0);  ///nvidia-cuda����
 	sessionOptions.SetGraphOptimizationLevel(ORT_ENABLE_BASIC);
+#ifdef WIN32
 	std::wstring widestr = std::wstring(model_path.begin(), model_path.end());   ///�����windowsϵͳ����ôд
-	ort_session = new Session(env, model_path.c_str(), sessionOptions);   ///�����windowsϵͳ����ôд
-	///ort_session = new Session(env, model_path.c_str(), sessionOptions);  ///�����linuxϵͳ������ôд
-
+	ort_session = new Session(env, widestr.c_str(), sessionOptions);   ///�����windowsϵͳ����ôд
+#else
+	ort_session = new Session(env, model_path.c_str(), sessionOptions);  ///�����linuxϵͳ������ôд
+#endif
 	size_t numInputNodes = ort_session->GetInputCount();
 	size_t numOutputNodes = ort_session->GetOutputCount();
 	AllocatorWithDefaultOptions allocator;
@@ -114,10 +116,13 @@ Mat CodeFormer::detect(Mat srcimg)
 
 	auto allocator_info = MemoryInfo::CreateCpu(OrtDeviceAllocator, OrtMemTypeCPU);
 	vector<Value> ort_inputs;
-	ort_inputs.push_back(Value::CreateTensor<float>(allocator_info, input_image_.data(), input_image_.size(), input_shape_.data(), input_shape_.size()));
-	ort_inputs.push_back(Value::CreateTensor<double>(allocator_info, input2_tensor.data(), input2_tensor.size(), input2_shape_.data(), input2_shape_.size()));
-	vector<Value> ort_outputs = ort_session->Run(RunOptions{ nullptr }, input_names.data(), ort_inputs.data(), input_names.size(), output_names.data(), output_names.size());
-	
+	ort_inputs.push_back(Value::CreateTensor<float>(allocator_info, input_image_.data(), input_image_.size(),
+	                                                input_shape_.data(), input_shape_.size()));
+	ort_inputs.push_back(Value::CreateTensor<double>(allocator_info, input2_tensor.data(), input2_tensor.size(),
+	                                                 input2_shape_.data(), input2_shape_.size()));
+	vector<Value> ort_outputs = ort_session->Run(RunOptions{nullptr}, input_names.data(), ort_inputs.data(),
+	                                             input_names.size(), output_names.data(), output_names.size());
+
 	////post_process
 	float* pred = ort_outputs[0].GetTensorMutableData<float>();
 	//////Mat mask(outHeight, outWidth, CV_32FC3, pred); /////��������,ֱ��������ֵ,�ǲ��е�
@@ -145,8 +150,14 @@ Mat CodeFormer::detect(Mat srcimg)
 
 int main()
 {
-	CodeFormer mynet("/media/lae/data/testProject/functions/CodeFormer-onnxrun-cpp-py-main/codeformer.onnx");
-	string imgpath = "/media/lae/data/testProject/functions/CodeFormer-onnxrun-cpp-py-main/input.png";
+#ifdef WIN32
+	string path = "D:/testProject/functions/CodeFormer-onnxrun-cpp-py-main/";
+#else
+	string path = "/media/lae/data/testProject/functions/CodeFormer-onnxrun-cpp-py-main\";
+#endif
+
+	CodeFormer mynet(path+"codeformer.onnx");
+	string imgpath = path+"test3.jpeg";
 	Mat srcimg = imread(imgpath);
 	Mat dstimg = mynet.detect(srcimg);
 	resize(dstimg, dstimg, Size(srcimg.cols, srcimg.rows), INTER_LINEAR);

@@ -38,10 +38,14 @@ private:
 
 Informative_Drawings::Informative_Drawings(string model_path)
 {
+	sessionOptions.SetGraphOptimizationLevel(ORT_ENABLE_BASIC);
+#if defined(WIN32)
 	std::wstring widestr = std::wstring(model_path.begin(), model_path.end());
 	//OrtStatus* status = OrtSessionOptionsAppendExecutionProvider_CUDA(sessionOptions, 0);
-	sessionOptions.SetGraphOptimizationLevel(ORT_ENABLE_BASIC);
+	ort_session = new Session(env, widestr.c_str(), sessionOptions);
+#else
 	ort_session = new Session(env, model_path.c_str(), sessionOptions);
+#endif
 	size_t numInputNodes = ort_session->GetInputCount();
 	size_t numOutputNodes = ort_session->GetOutputCount();
 	AllocatorWithDefaultOptions allocator;
@@ -98,7 +102,9 @@ Mat Informative_Drawings::detect(Mat& srcimg)
 	array<int64_t, 4> input_shape_{ 1, 3, this->inpHeight, this->inpWidth };
 
 	auto allocator_info = MemoryInfo::CreateCpu(OrtDeviceAllocator, OrtMemTypeCPU);
-	Value input_tensor_ = Value::CreateTensor<float>(allocator_info, input_image_.data(), input_image_.size(), input_shape_.data(), input_shape_.size());
+	Value input_tensor_ = Value::CreateTensor<float>(
+		allocator_info, input_image_.data(),
+		input_image_.size(), input_shape_.data(), input_shape_.size());
 
 	// ��ʼ����
 	vector<Value> ort_outputs = ort_session->Run(RunOptions{ nullptr }, &input_names[0], &input_tensor_, 1, output_names.data(), output_names.size());   // ��ʼ����
@@ -112,10 +118,15 @@ Mat Informative_Drawings::detect(Mat& srcimg)
 
 int main()
 {
-	Informative_Drawings mynet(
-			"/media/lae/data/testProject/functions/informative-drawings-onnxrun-cpp-py-main/weights/anime_style_512x512.onnx");
+#ifdef WIN32
+	string path = "D:/testProject/functions/informative-drawings-onnxrun-cpp-py-main/";
+#else
+	string path = "/media/lae/data/testProject/functions/informative-drawings-onnxrun-cpp-py-main\";
+#endif
+
+	Informative_Drawings mynet(path+"weights/anime_style_512x512.onnx");
 	///choices=["weights/opensketch_style_512x512.onnx", "weights/anime_style_512x512.onnx", "weights/contour_style_512x512.onnx"]
-	string imgpath = "/media/lae/data/testProject/functions/informative-drawings-onnxrun-cpp-py-main/images/1.jpg";
+	string imgpath = path+"images/2.jpg";
 	Mat srcimg = imread(imgpath);
 	Mat result = mynet.detect(srcimg);
 	resize(result, result, Size(srcimg.cols, srcimg.rows));
