@@ -61,4 +61,4 @@ add_subdirectory(informative-drawings-onnxrun-cpp-py-main)
 add_subdirectory(CodeFormer-onnxrun-cpp-py-main)
 add_subdirectory(gaze-estimation-opencv-dnn-main)
 add_subdirectory(facefusion)
-
+add_subdirectory(fmt)
