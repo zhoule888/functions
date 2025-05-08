@@ -75,39 +75,49 @@ std::string_view getFileExtension(std::string_view filename) {
 
 int test_string_view()
 {
-	std::string str = "Hello";
-	std::string_view sv = str; // 隐式转换
 
-	std::string copy(sv); // 显式转换为string
+	{
+		std::string str = "Hello";
+		std::string_view sv = str; // 隐式转换
 
-	std::string_view sv1 = "hello,world";  //从字符串直接初始化std::string_view对象
-    
-    //常用的方法
-    std::cout << "长度：" <<sv1.length()<<std::endl;
-    std::cout << "是否为空：" <<sv1.empty()<<std::endl;
-    std::cout << "第一个字符：" <<sv1.front()<<std::endl;
-    std::cout << "最后一个字符：" <<sv1.back()<<std::endl;
-    std::cout << "子串操作：" <<sv1.substr(0,5)<<std::endl;  //"hello"
+		std::string copy(sv); // 显式转换为string
 
-    // 1. 移除前缀和后缀
-    std::string_view sv = "Hello World";
+		std::string_view sv1 = "hello,world";  //从字符串直接初始化std::string_view对象
 
-    sv.remove_prefix(6);  // 移除 "Hello "
-    std::cout << sv << "\n";  // 输出 "World"
+	    //常用的方法
+	    std::cout << "长度：" <<sv1.length()<<std::endl;
+	    std::cout << "是否为空：" <<sv1.empty()<<std::endl;
+	    std::cout << "第一个字符：" <<sv1.front()<<std::endl;
+	    std::cout << "最后一个字符：" <<sv1.back()<<std::endl;
+	    std::cout << "子串操作：" <<sv1.substr(0,5)<<std::endl;  //"hello"
+	}
 
-    sv.remove_suffix(2);  // 移除 "ld"
-    std::cout << sv << "\n";  // 输出 "Wor"
 
-    // 2. 查找操作
-    std::string_view text = "Hello World Hello";
-    std::cout << text.find("Hello") << "\n";      // 首次出现位置
-    std::cout << text.rfind("Hello") << "\n";     // 最后出现位置
+	{
+	    // 1. 移除前缀和后缀
+	    std::string_view sv = "Hello World";
 
-    // 3. 比较操作
-    std::string_view sv1 = "Hello";
-    std::string_view sv2 = "World";
-    std::cout << (sv1 < sv2) << "\n";  // 字典序比较
+	    sv.remove_prefix(6);  // 移除 "Hello "
+	    std::cout << sv << "\n";  // 输出 "World"
+
+	    sv.remove_suffix(2);  // 移除 "ld"
+	    std::cout << sv << "\n";  // 输出 "Wor"
+
+	    // 2. 查找操作
+	    std::string_view text = "Hello World Hello";
+	    std::cout << text.find("Hello") << "\n";      // 首次出现位置
+	    std::cout << text.rfind("Hello") << "\n";     // 最后出现位置
+
+	    // 3. 比较操作
+	    std::string_view sv1 = "Hello";
+	    std::string_view sv2 = "World";
+	    std::cout << (sv1 < sv2) << "\n";  // 字典序比较
+	}
 
 
 }
 
+int main()
+{
+
+}
